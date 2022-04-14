@@ -11,12 +11,17 @@ class TemplateRenderer {
         $this->expander = new TemplateExpander;
     }
 
-    private function getPropertiesFromNode(\DOMNode $instanceNode): array {
+    /**
+     * Get key-value array of properties (attributes with names starting with ':') from a node
+     * @param \DOMNode $node Node to get properties from
+     * @return array Key-value array of properties
+     */
+    private function getPropertiesFromNode(\DOMNode $node): array {
         $props = [];
-        if (count($instanceNode->childNodes) > 0) {
-            $props["in"] = Util::domChildrenToString($instanceNode);
+        if (count($node->childNodes) > 0) {
+            $props["in"] = Util::domChildrenToString($node);
         }
-        foreach ($instanceNode->attributes as $name => $attr) {
+        foreach ($node->attributes as $name => $attr) {
             if(strlen($name) > 1 && $name[0] == ':') {
                 $props[substr($name, 1)] = empty($attr->value) ? true : trim($attr->value);
             }
@@ -24,18 +29,21 @@ class TemplateRenderer {
         return $props;
     }
 
-    private function getInstanceFromElement(\DOMElement $instanceElement): ?TemplateInstance {
-        $path = $instanceElement->getAttribute("regal:path");
-        $props = $this->getPropertiesFromNode($instanceElement);
-
+    /**
+     * Create a new template instance based on an element in the DOM
+     * @param \DOMElement $element Element to construct TemplateInstance from
+     * @return ?TemplateInstance Returns a TemplateInstance if successful, null otherwise
+     */
+    private function getInstanceFromElement(\DOMElement $element): ?TemplateInstance {
+        $path = $element->getAttribute("regal:path");
+        $props = $this->getPropertiesFromNode($element);
         return $this->engine->getInstance($path, empty($props) ? null : $props);
     }
 
     /**
      * Renders a given template instance
-     * 
      * @param TemplateInstance $instance Template instance
-     * @return array Returns an array of instance IDs referenced by this instance, or false if an error occurred
+     * @return array|false Returns an array of instance IDs referenced by this instance, or false if an error occurred
      */
     public function renderInstance(TemplateInstance $instance): array|false {
         $dependencies = [];

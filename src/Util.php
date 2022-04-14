@@ -14,7 +14,11 @@ class Util {
         return preg_replace("/<\/head>/", $append . PHP_EOL . "</head>", $html);
     }
 
-
+    /**
+     * Convert a DOM node subtree into an HTML string
+     * @param \DOMNode $node Node
+     * @return string Node content as HTML string
+     */
     public static function domChildrenToString(\DOMNode $node): string {
         $doc = new Document;
         foreach ($node->childNodes as $child) {
@@ -59,6 +63,11 @@ class Util {
         return preg_replace("/^\s*|\n|\s*$/Sm", "", $css);
     }
 
+    /**
+     * Append directory seperator to the end of a path if one isn't present
+     * @param string $path Path
+     * @return string Path with directory seperator at the end
+     */
     public static function normalizeDirectory(string $path): string {
         $len = strlen($path);
         if ($path[$len - 1] === '/' || $path[$len - 1] === '\\') {
@@ -67,6 +76,12 @@ class Util {
         return $path . DIRECTORY_SEPARATOR;
     }
 
+    /**
+     * Resolve a template path like 'components/metadata' to a file path
+     * @param string $templatePath Template path to resolve
+     * @param string $templateDir Template root directory
+     * @return string File path
+     */
     public static function resolveTemplatePath(string $templatePath, string $templateDir): string {
         $path = self::normalizeDirectory($templateDir) . $templatePath;
         $ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -76,6 +91,11 @@ class Util {
         return $path;
     }
 
+    /**
+     * Return everything behind the last '.' in a path
+     * @param string $path
+     * @return string
+     */
     public static function removeExtension(string $path): string {
         return substr($path, 0, strrpos($path, ".") ?: null);
     }
