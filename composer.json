@@ -1,0 +1,21 @@
+{
+    "name": "amcco/regal",
+    "description": "A static site generator optimized for low bandwidth",
+    "version": "0.1.0",
+    "type": "project",
+    "keywords": [ "templating", "html" ],
+    "license": "Apache-2.0",
+    "authors": [ 
+        { 
+            "name": "Alex Miccolis",
+            "email": "alex.miccolis@amcco.xyz",
+            "homepage": "https://amcco.xyz",
+            "role": "developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Regal\\": "src/" }
+    },
+    "require": { "php": ">=8.0" },
+    "bin": [ "bin/regal.php" ]
+}
